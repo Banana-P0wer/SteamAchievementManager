@@ -572,6 +572,7 @@ namespace SAM.Game
                     Permission = def.Permission,
                     Name = def.Name,
                     Description = def.Description,
+                    AchievedPercent = def.AchievedPercent,
                 };
 
                 ListViewItem item = new()
@@ -597,7 +598,9 @@ namespace SAM.Game
                 item.SubItems.Add(info.UnlockTime.HasValue == true
                     ? info.UnlockTime.Value.ToString()
                     : "");
-                item.SubItems.Add("");
+                item.SubItems.Add(info.AchievedPercent.HasValue == true
+                    ? info.AchievedPercent.Value.ToString("0.00", CultureInfo.InvariantCulture) + "%"
+                    : "");
 
                 info.ImageIndex = 0;
 
@@ -650,6 +653,11 @@ namespace SAM.Game
                 }
 
                 achievementInfo.AchievedPercent = percent;
+                var definition = this._AchievementDefinitions.FirstOrDefault(def => def.Id == achievementInfo.Id);
+                if (definition != null)
+                {
+                    definition.AchievedPercent = percent;
+                }
                 item.SubItems[3].Text = percent.ToString("0.00", CultureInfo.InvariantCulture) + "%";
             }
 
